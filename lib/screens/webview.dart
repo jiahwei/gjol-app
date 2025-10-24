@@ -1,7 +1,6 @@
 // ... existing code ...
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-// ... existing code ...
 class WebViewPage extends StatefulWidget {
   final String initialUrl;
   const WebViewPage({super.key, required this.initialUrl});
@@ -23,11 +22,23 @@ class _WebViewPageState extends State<WebViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body:  SafeArea(
-        child: WebViewWidget(controller: _controller),
-      )
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        final canGoBack = await _controller.canGoBack();
+        if (canGoBack) {
+          await _controller.goBack();
+          return;
+        }
+        if (!context.mounted) return;
+        Navigator.of(context).maybePop(result);
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: WebViewWidget(controller: _controller),
+        ),
+      ),
     );
   }
 }
-// ... existing code ...

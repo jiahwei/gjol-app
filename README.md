@@ -25,6 +25,8 @@ adb connect 192.168.31.105:43005
 ## 打包到手机
 
 ```shell
+# 说是要java version > 17，用最新的算了
+sdk use java 17.0.17-tem
 adb devices
 flutter run --release -d adb-d0dda941-uH0Kn0._adb-tls-connect._tcp
 
