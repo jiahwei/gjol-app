@@ -2,15 +2,32 @@
 
 gjoldb.info的APP版本
 
-## Getting Started
+## 调试相关内容
 
-This project is a starting point for a Flutter application.
+### ADB
 
-A few resources to get you started if this is your first Flutter project:
+```shell
+adb devices
+# 启用 TCP/IP 模式（默认端口 5555）
+adb tcpip 5555
+adb connect <手机IP>:5555
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 无线调试
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```shell
+# 配对接口
+adb pair 192.168.31.105:43005
+# 调试接口
+adb connect 192.168.31.105:43005
+```
+
+## 打包到手机
+
+```shell
+adb devices
+flutter run --release -d adb-d0dda941-uH0Kn0._adb-tls-connect._tcp
+
+flutter build apk --release
+adb install -r build/app/outputs/flutter-apk/app-release.apk
+```
