@@ -26,7 +26,11 @@ adb connect 192.168.31.105:43005
 
 ```shell
 # 说是要java version > 17，用最新的算了
+# mac
 sdk use java 17.0.17-tem
+# Windows
+jabba use temurin@17.0.
+
 adb devices
 flutter run --release -d adb-d0dda941-uH0Kn0._adb-tls-connect._tcp
 

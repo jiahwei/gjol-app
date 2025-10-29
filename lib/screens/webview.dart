@@ -1,6 +1,7 @@
 // ... existing code ...
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
 class WebViewPage extends StatefulWidget {
   final String initialUrl;
   const WebViewPage({super.key, required this.initialUrl});
