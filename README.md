@@ -32,10 +32,10 @@ adb connect 192.168.31.105:43005
 ## 打包到手机
 
 ```shell
-# 说是要java version > 17，用最新的算了
-# mac
+# 说是要java version > 17
+# mac 使用 SDKMAN！
 sdk use java 17.0.17-tem
-# Windows
+# Windows 使用 jabba
 jabba use temurin@17.0.
 
 adb devices
