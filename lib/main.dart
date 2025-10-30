@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'views/webview.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:gjol_app/network/api_provider.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // await dotenv.load(fileName: ".env");
+  await ApiProvider.init();
+  final result = await request('/bulletins/query', method: 'GET', data: {'bulletin_id': 1});
+  print(result);
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

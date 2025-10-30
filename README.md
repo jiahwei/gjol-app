@@ -32,9 +32,12 @@ adb connect 192.168.31.105:43005
 ## 打包到手机
 
 ```shell
-# IOS 使用 SDKMAN！
+# 说是要java version > 17，用最新的算了
+# mac
 sdk use java 17.0.17-tem
-# WINDOWS 使用
+# Windows
+jabba use temurin@17.0.
+
 adb devices
 flutter run --release -d adb-d0dda941-uH0Kn0._adb-tls-connect._tcp
 
