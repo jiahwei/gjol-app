@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:gjol_app/network/api_constants.dart';
-import 'package:gjol_app/network/api_exceptions.dart';
+import 'package:gjol_app/core/network/api_constants.dart';
+import 'package:gjol_app/core/network/api_exceptions.dart';
 // import 'package:gjol_app/network/api_interceptors.dart'; // 如果有自定义处理器，可取消注释并调用相关方法
 
 // 内部共享的 Dio 实例

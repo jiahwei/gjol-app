@@ -41,6 +41,8 @@ jabba use temurin@17.0.
 adb devices
 flutter run --release -d adb-d0dda941-uH0Kn0._adb-tls-connect._tcp
 
+flutter run --dart-define=ENV=dev -d 192.168.31.213:36541 -v
+
 flutter build apk --release
 adb install -r build/app/outputs/flutter-apk/app-release.apk
 ```
