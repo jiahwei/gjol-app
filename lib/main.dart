@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gjol_app/core/network/api_provider.dart';
 import 'package:gjol_app/services/desvice_id.dart';
-import 'package:flutter/material.dart';
+import 'package:gjol_app/services/crypto.dart';
 import 'views/webview.dart';
 import 'views/manage.dart';
 
@@ -24,7 +24,10 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   Future<bool> checkAndroidId() async {
-    final androidId = await getAndroidId();
+    final androidId = await getAndroidId() ?? '';
+    final info = SecurityHelper.buildPayload(androidId);
+    print('info');
+    print(info);
     // TODO 这里逻辑应该从服务器获取
     return androidId == 'XXXXXXX';
   }
