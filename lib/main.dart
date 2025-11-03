@@ -25,11 +25,13 @@ class MyApp extends StatelessWidget {
 
   Future<bool> checkAndroidId() async {
     final deviceId = await getStableDeviceId();
-    final info = SecurityHelper.buildPayload(deviceId);
-    debugPrint('info');
-    debugPrint(info.toString());
-    // TODO 这里逻辑应该从服务器获取
-    return deviceId == 'XXXXXXX';
+    final info = MyCrypto.buildPayload(deviceId);
+    debugPrint('info: ${info}');
+
+    final result = await request('/auth/isOpenManage', method: 'POST', data: info);
+
+    final isOpenManage = result['isOpenManage'] as bool? ?? false;
+    return isOpenManage;
   }
 
   @override

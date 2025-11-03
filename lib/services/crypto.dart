@@ -1,21 +1,24 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class SecurityHelper {
-  // AES 密钥（必须是 32 字节）
-  static final _key = dotenv.env['AES_KEY'] ?? '';
-  static final _aesKey = Key.fromUtf8(_key);
-  static final _iv = IV.fromLength(16);
-
-  // HMAC 密钥（服务端共享）
+class MyCrypto  {
+  static final String _hexKey = dotenv.env['AES_KEY'] ?? '';
+  static final List<int> _keyBytes = List<int>.generate(
+    _hexKey.length ~/ 2,
+        (i) => int.parse(_hexKey.substring(i * 2, i * 2 + 2), radix: 16),
+  );
+  static final Key _aesKey = Key(Uint8List.fromList(_keyBytes));
+  static final IV _iv = IV.fromLength(12);
   static final _hmacSecret = dotenv.env['HMAC_SECRET'] ?? 'your-hmac-secret';
 
-  /// AES 加密 Android ID
   static String encryptAndroidId(String androidId) {
-    final encrypter = Encrypter(AES(_aesKey, mode: AESMode.cbc));
+    final encrypter = Encrypter(AES(_aesKey, mode: AESMode.gcm));
     final encrypted = encrypter.encrypt(androidId, iv: _iv);
+    final decrypted = encrypter.decrypt(encrypted, iv: _iv);
+
     return encrypted.base64;
   }
 
@@ -25,7 +28,7 @@ class SecurityHelper {
     final bytes = utf8.encode(encryptedId);
     final hmacSha256 = Hmac(sha256, key);
     final digest = hmacSha256.convert(bytes);
-    return digest.toString(); // hex string
+    return digest.toString();
   }
 
   /// 打包请求体
@@ -35,6 +38,7 @@ class SecurityHelper {
     return {
       'id': encrypted,
       'sig': signature,
+      'iv': base64.encode(_iv.bytes),
     };
   }
 }
