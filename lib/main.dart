@@ -3,8 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gjol_app/core/network/api_provider.dart';
 import 'package:gjol_app/services/desvice_id.dart';
 import 'package:gjol_app/services/crypto.dart';
-import 'views/webview.dart';
-import 'views/manage.dart';
+import 'package:gjol_app/views/webview.dart';
+import 'package:gjol_app/views/manage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,12 +24,12 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   Future<bool> checkAndroidId() async {
-    final androidId = await getAndroidId() ?? '';
-    final info = SecurityHelper.buildPayload(androidId);
-    print('info');
-    print(info);
+    final deviceId = await getStableDeviceId();
+    final info = SecurityHelper.buildPayload(deviceId);
+    debugPrint('info');
+    debugPrint(info.toString());
     // TODO 这里逻辑应该从服务器获取
-    return androidId == 'XXXXXXX';
+    return deviceId == 'XXXXXXX';
   }
 
   @override
