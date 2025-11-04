@@ -26,11 +26,17 @@ class MyApp extends StatelessWidget {
   Future<bool> checkAndroidId() async {
     final deviceId = await getStableDeviceId();
     final info = MyCrypto.buildPayload(deviceId);
+    late final bool isOpenManage;
     debugPrint('info: ${info}');
 
-    final result = await request('/auth/isOpenManage', method: 'POST', data: info);
 
-    final isOpenManage = result['isOpenManage'] as bool? ?? false;
+    try{
+      final result = await request('/auth/isOpenManage', method: 'POST', data: info);
+      isOpenManage = result['isOpenManage'] as bool? ?? false;
+    } catch (_) {
+      isOpenManage = false;
+    }
+
     return isOpenManage;
   }
 

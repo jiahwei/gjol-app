@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uuid/uuid.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 Future<String?> getAndroidId() async {
   final deviceInfo = DeviceInfoPlugin();
@@ -13,6 +15,12 @@ Future<String?> getIosId() async {
   final deviceInfo = DeviceInfoPlugin();
   final iosInfo = await deviceInfo.iosInfo;
   return iosInfo.identifierForVendor;
+}
+
+String getHashId(String deviceId) {
+  final bytes = utf8.encode(deviceId);
+  final digest = sha256.convert(bytes);
+  return digest.toString();
 }
 
 Future<String> getStableDeviceId() async {
@@ -29,6 +37,7 @@ Future<String> getStableDeviceId() async {
   }
 
   id = platformId ?? const Uuid().v4();
-  await storage.write(key: key, value: id);
-  return id;
+  final hashId = getHashId(id);
+  await storage.write(key: key, value: hashId);
+  return hashId;
 }
