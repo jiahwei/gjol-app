@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
     final deviceId = await getStableDeviceId();
     final info = MyCrypto.buildPayload(deviceId);
     late final bool isOpenManage;
-    debugPrint('info: ${info}');
+    debugPrint('info: $info');
 
 
     try{
