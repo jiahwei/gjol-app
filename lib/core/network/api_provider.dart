@@ -85,8 +85,7 @@ Future<T> request<T>(
         },
       ),
     );
-    // return parseResponse<T>(response.data['data'], fromJson);
-    return parseResponse<T>(response.data, fromJson);
+    return parseResponse<T>(response.data['data'], fromJson);
 
   } on DioException catch (e) {
     final message = e.message ?? ApiConstants.networkTimeoutMessage;
