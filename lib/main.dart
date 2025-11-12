@@ -5,6 +5,7 @@ import 'package:gjol_app/services/desvice_id.dart';
 import 'package:gjol_app/services/crypto.dart';
 import 'package:gjol_app/views/webview.dart';
 import 'package:gjol_app/views/manage.dart';
+import 'package:gjol_app/models/auth/is_open_manage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +15,8 @@ Future<void> main() async {
   // print(result);
   runApp(MyApp());
 }
-Future<void> init() async{
+
+Future<void> init() async {
   final env = String.fromEnvironment('ENV', defaultValue: 'dev');
   await dotenv.load(fileName: '.env.$env');
   await ApiProvider.init();
@@ -29,10 +31,14 @@ class MyApp extends StatelessWidget {
     late final bool isOpenManage;
     debugPrint('info: $info');
 
-
-    try{
-      final result = await request('/auth/isOpenManage', method: 'POST', data: info);
-      isOpenManage = result['isOpenManage'] as bool? ?? false;
+    try {
+      final result = await request<IsOpenManageResponse>(
+        '/auth/isOpenManage',
+        method: 'POST',
+        data: info,
+        fromJson: IsOpenManageResponse.fromJson,
+      );
+      isOpenManage = result.isOpenManage;
     } catch (_) {
       isOpenManage = false;
     }
@@ -61,4 +67,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

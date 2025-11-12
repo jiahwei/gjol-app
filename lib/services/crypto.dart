@@ -17,7 +17,7 @@ class MyCrypto  {
   static String encryptAndroidId(String androidId) {
     final encrypter = Encrypter(AES(_aesKey, mode: AESMode.gcm));
     final encrypted = encrypter.encrypt(androidId, iv: _iv);
-    final decrypted = encrypter.decrypt(encrypted, iv: _iv);
+    // final decrypted = encrypter.decrypt(encrypted, iv: _iv);
 
     return encrypted.base64;
   }

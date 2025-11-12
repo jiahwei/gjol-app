@@ -67,7 +67,8 @@ Future<T> request<T>(
   bool isToast = true,
   bool isCancelReq = true,
   bool isDeduplication = true,
-  T Function(dynamic)? fromJson,
+  T Function(Map<String, dynamic>)? fromJson,
+  T Function(List<dynamic>)? fromJsonList,
 }) async {
   try {
     final isGet = method.toUpperCase() == 'GET';
@@ -85,7 +86,7 @@ Future<T> request<T>(
         },
       ),
     );
-    return parseResponse<T>(response.data['data'], fromJson);
+    return parseResponse<T>(response.data['data'], fromJson, fromJsonList);
 
   } on DioException catch (e) {
     final message = e.message ?? ApiConstants.networkTimeoutMessage;
@@ -93,8 +94,43 @@ Future<T> request<T>(
   }
 }
 
-T parseResponse<T>(dynamic data, T Function(dynamic)? fromJson) {
-  if (fromJson != null) return fromJson(data);
+T parseResponse<T>(dynamic data, T Function(Map<String, dynamic>)? fromJson, T Function(List<dynamic>)? fromJsonList) {
+  if (fromJson != null && data is Map) {
+    return fromJson(Map<String, dynamic>.from(data));
+  }
+  if (fromJsonList != null && data is List) {
+    return fromJsonList(List<dynamic>.from(data));
+  }
   if (data is T) return data;
   throw HttpException('Response type mismatch');
+}
+
+Future<M> requestModel<M>(
+  String path, {
+  String method = 'POST',
+  dynamic data,
+  required M Function(Map<String, dynamic>) fromJson,
+}) async {
+  return await request<M>(
+    path,
+    method: method,
+    data: data,
+    fromJson: fromJson,
+  );
+}
+
+Future<List<M>> requestList<M>(
+  String path, {
+  String method = 'POST',
+  dynamic data,
+  required M Function(Map<String, dynamic>) itemFromJson,
+}) async {
+  return await request<List<M>>(
+    path,
+    method: method,
+    data: data,
+    fromJsonList: (list) => list
+        .map((e) => itemFromJson(Map<String, dynamic>.from(e as Map)))
+        .toList(),
+  );
 }
