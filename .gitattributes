@@ -1,10 +1,10 @@
 # 只统计 lib/ 下的 Dart 代码
 *.dart linguist-detectable=true
 
-# 忽略自动生成的文件和目录
-build/* linguist-vendored
-ios/* linguist-vendored
-android/* linguist-vendored
+# 忽略自动生成的文件和目录（递归匹配）
+build/** linguist-vendored
+ios/** linguist-vendored
+android/** linguist-vendored
 
 # 忽略 Web 构建产物
 web/*.html linguist-vendored
