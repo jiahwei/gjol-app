@@ -1,0 +1,19 @@
+# 只统计 lib/ 下的 Dart 代码
+*.dart linguist-detectable=true
+
+# 忽略自动生成的文件和目录
+build/* linguist-vendored
+ios/* linguist-vendored
+android/* linguist-vendored
+
+# 忽略 Web 构建产物
+web/*.html linguist-vendored
+web/*.js linguist-vendored
+web/*.css linguist-vendored
+
+# 忽略依赖库
+*.min.js linguist-vendored
+*.map linguist-vendored
+
+# 如果有大文件（如 index.html），直接排除
+web/index.html linguist-vendored
