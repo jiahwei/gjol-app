@@ -70,6 +70,7 @@ Future<T> request<T>(
   T Function(Map<String, dynamic>)? fromJson,
   T Function(List<dynamic>)? fromJsonList,
 }) async {
+  if (!_initialized) await ApiProvider.init();
   try {
     final isGet = method.toUpperCase() == 'GET';
     final response = await _dio.request(
