@@ -6,8 +6,12 @@ part 'is_open_manage.g.dart';
 class IsOpenManageResponse {
   @JsonKey(name: 'isOpenManage')
   final bool isOpenManage;
+  @JsonKey(name: 'token')
+  final String token;
+  @JsonKey(name: 'refreshToken')
+  final String refreshToken;
 
-  IsOpenManageResponse({required this.isOpenManage});
+  IsOpenManageResponse({required this.isOpenManage, required this.token, required this.refreshToken});
 
   factory IsOpenManageResponse.fromJson(Map<String, dynamic> json) => _$IsOpenManageResponseFromJson(json);
 

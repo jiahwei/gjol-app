@@ -10,12 +10,16 @@ IsOpenManageResponse _$IsOpenManageResponseFromJson(
         Map<String, dynamic> json) =>
     IsOpenManageResponse(
       isOpenManage: json['isOpenManage'] as bool,
+      token: json['token'] as String,
+      refreshToken: json['refreshToken'] as String,
     );
 
 Map<String, dynamic> _$IsOpenManageResponseToJson(
         IsOpenManageResponse instance) =>
     <String, dynamic>{
       'isOpenManage': instance.isOpenManage,
+      'token': instance.token,
+      'refreshToken': instance.refreshToken,
     };
 
 IsOpenManagePayload _$IsOpenManagePayloadFromJson(Map<String, dynamic> json) =>

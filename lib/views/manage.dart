@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:gjol_app/provider/dev.dart';
 class ManagePage extends StatelessWidget{
   const ManagePage({super.key});
 
@@ -19,9 +21,16 @@ class ManageContent extends StatelessWidget{
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text('iOS Home'),
+        middle: Text('管理'),
       ),
-      child: Center(child: Text('Hello iOS')),
+      child: Consumer(builder: (context, ref, child) {
+          final testResolve = ref.watch(devTestResolveProvider('2025-10-01'));
+          return Text(testResolve.when(
+            data: (data) => data.toString(),
+            loading: () => 'Loading...',
+            error: (error, stackTrace) => error.toString(),
+          ));
+        }),
     );
   }
 }

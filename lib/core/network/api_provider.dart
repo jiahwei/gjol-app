@@ -1,21 +1,28 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:gjol_app/core/network/api_constants.dart';
 import 'package:gjol_app/core/network/api_exceptions.dart';
-// import 'package:gjol_app/network/api_interceptors.dart'; // 如果有自定义处理器，可取消注释并调用相关方法
+import 'package:gjol_app/core/network/api_interceptors.dart';
 
 // 内部共享的 Dio 实例
 final Dio _dio = Dio();
+final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+final ApiInterceptors _interceptors = ApiInterceptors(_dio, _secureStorage);
 
 bool _initialized = false;
+
+
 
 /// 提供静态 init 方法，main.dart 中调用 ApiProvider.init()
 class ApiProvider {
   ApiProvider._();
 
+
   static Future<void> init() async {
     if (_initialized) return;
+
 
     _dio.options = BaseOptions(
       baseUrl: ApiConstants.baseUrl,
@@ -24,33 +31,20 @@ class ApiProvider {
       headers: {'Content-Type': ApiConstants.contentType},
     );
 
-    if (kDebugMode) {
-      _dio.interceptors.add(
-        LogInterceptor(
-          request: true,
-          requestBody: true,
-          responseBody: true,
-          responseHeader: false,
-        ),
-      );
-    }
-
     // 添加默认拦截器（只添加一次）
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           // 如果有自定义 onRequest（在 api_interceptors.dart），在此处调用
-          // await onRequest(options);
+          await _interceptors.onRequest(options);
           handler.next(options);
         },
-        onResponse: (response, handler) {
-          // 统一处理 response（按需修改）
+        onResponse: (response, handler) async{
+          // 统一处理 response
+          await _interceptors.onResponse(response);
           handler.next(response);
         },
-        onError: (err, handler) {
-          // 统一处理错误（按需修改）
-          handler.next(err);
-        },
+        onError: _interceptors.onError,
       ),
     );
 

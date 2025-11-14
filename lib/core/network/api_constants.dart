@@ -11,7 +11,9 @@ class ApiConstants {
 
   static const Duration defaultTimeout = Duration(milliseconds: 5000);
 
-  static const String headerTokenKey = 'X-Token';
+  static const String accessTokenKey = 'token';
+  static const String refreshTokenKey = 'refreshToken';
+
   static const String contentType = 'application/json;charset=UTF-8';
 
   static const String extraIsLoading = 'isLoading';
